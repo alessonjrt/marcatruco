@@ -1,3 +1,4 @@
+import 'package:cardmate/shared/enums/rise_mode.dart';
 import 'package:flutter/material.dart';
 
 
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 class ScoreBoardController extends ChangeNotifier {
   int _team1Score = 0;
   int _team2Score = 0;
+
+  RiseMode raiseMode = RiseMode.none;
 
   int get team1Score => _team1Score;
   int get team2Score => _team2Score;

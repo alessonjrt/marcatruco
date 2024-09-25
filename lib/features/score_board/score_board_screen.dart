@@ -1,4 +1,5 @@
 import 'package:cardmate/shared/widgets/score_widget.dart';
+import 'package:cardmate/shared/widgets/truco_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cardmate/features/score_board/score_board_controller.dart';
 
@@ -32,77 +33,46 @@ class _ScoreBoardPageState extends State<ScoreBoardPage> {
         ],
       ),
       body: Center(
-        child: buildLayout(),
+        child: _buildLayout(),
       ),
     );
   }
 
-  Widget buildLayout() {
-    return _buildRowLayout();
-  }
-
-  Widget _buildRowLayout() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: AnimatedBuilder(
-                        animation: _scoreBoardController,
-
-            builder: (context, child) => ScoreWidget(
-              teamName: "Equipe 1",
-              score: _scoreBoardController.team1Score,
-              onAdd: _scoreBoardController.addPointTeam1,
-              onSubtract: _scoreBoardController.subtractPointTeam1,
-            ),
-          ),
-        ),
-        Expanded(
-          child: AnimatedBuilder(
-            animation: _scoreBoardController,
-            builder: (BuildContext context, Widget? child) {
-              return ScoreWidget(
-                teamName: "Equipe 2",
-                score: _scoreBoardController.team2Score,
-                onAdd: _scoreBoardController.addPointTeam2,
-                onSubtract: _scoreBoardController.subtractPointTeam2,
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildColumn() {
+  Widget _buildLayout() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: AnimatedBuilder(
-            animation: _scoreBoardController,
-            builder: (context, child) {
-              return ScoreWidget(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: AnimatedBuilder(
+                animation: _scoreBoardController,
+                builder: (context, child) => ScoreWidget(
                   teamName: "Equipe 1",
                   score: _scoreBoardController.team1Score,
                   onAdd: _scoreBoardController.addPointTeam1,
-                  onSubtract: _scoreBoardController.subtractPointTeam1);
-            },
-          ),
+                  onSubtract: _scoreBoardController.subtractPointTeam1,
+                ),
+              ),
+            ),
+            Expanded(
+              child: AnimatedBuilder(
+                animation: _scoreBoardController,
+                builder: (BuildContext context, Widget? child) {
+                  return ScoreWidget(
+                    teamName: "Equipe 2",
+                    score: _scoreBoardController.team2Score,
+                    onAdd: _scoreBoardController.addPointTeam2,
+                    onSubtract: _scoreBoardController.subtractPointTeam2,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          child: AnimatedBuilder(
-            animation: _scoreBoardController,
-            builder: (context, child) {
-              return ScoreWidget(
-                  teamName: "Equipe 2",
-                  score: _scoreBoardController.team2Score,
-                  onAdd: _scoreBoardController.addPointTeam2,
-                  onSubtract: _scoreBoardController.subtractPointTeam2);
-            },
-          ),
-        ),
+        TrucoButton(onRiseModeChanged: (value) => {},)
+   
       ],
     );
   }

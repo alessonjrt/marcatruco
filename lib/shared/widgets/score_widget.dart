@@ -47,7 +47,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
+                    borderSide: BorderSide(color: Color.fromARGB(0, 234, 221, 221)),
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
@@ -84,16 +84,6 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                       onPressed: widget.onAdd),
                 ],
               ),
-              TextButton.icon(
-                  label: const Text(
-                    'truco!',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.local_fire_department,
-                    color: Colors.red,
-                  ))
             ],
           ),
         ),
