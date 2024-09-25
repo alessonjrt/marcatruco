@@ -26,7 +26,7 @@ class _ScoreBoardPageState extends State<ScoreBoardPage> {
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.grid_on),
+            icon: const Icon(Icons.grid_on),
             onPressed: () {},
           ),
         ],

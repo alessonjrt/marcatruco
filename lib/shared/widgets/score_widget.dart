@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class ScoreWidget extends StatefulWidget {
   final String teamName;
@@ -51,12 +52,19 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                 ),
                 style: const TextStyle(color: Colors.white),
               ),
-              Text(
-                widget.score.toString(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 62),
+              Badge(
+                backgroundColor: Colors.transparent,
+                alignment: Alignment.centerRight,
+                isLabelVisible: widget.score >= 10,
+                offset: const Offset(2, 2),
+                label: Lottie.asset(width: 30, 'assets/animations/fire.json'),
+                child: Text(
+                  widget.score.toString(),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 112),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
