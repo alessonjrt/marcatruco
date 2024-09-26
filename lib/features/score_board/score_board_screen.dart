@@ -1,27 +1,98 @@
+import 'dart:ui';
+
+import 'package:cardmate/models/team.dart';
 import 'package:cardmate/shared/widgets/score_widget.dart';
 import 'package:cardmate/shared/widgets/truco_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cardmate/features/score_board/score_board_controller.dart';
 
-class ScoreBoardPage extends StatefulWidget {
-  const ScoreBoardPage({super.key});
+class ScoreBoardScreen extends StatefulWidget {
+  const ScoreBoardScreen({super.key});
 
   @override
-  State<ScoreBoardPage> createState() => _ScoreBoardPageState();
+  State<ScoreBoardScreen> createState() => _ScoreBoardScreenState();
 }
 
-class _ScoreBoardPageState extends State<ScoreBoardPage> {
+class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
   late ScoreBoardController _scoreBoardController;
 
   @override
   void initState() {
-    _scoreBoardController = ScoreBoardController();
     super.initState();
+    _scoreBoardController = ScoreBoardController(
+        teamA: Team(
+          name: 'us',
+        ),
+        teamB: Team(name: 'them'));
+    _scoreBoardController.addListener(_controllerListener);
+  }
+
+  @override
+  void dispose() {
+    _scoreBoardController.removeListener(_controllerListener);
+    _scoreBoardController.dispose();
+    super.dispose();
+  }
+
+  void _controllerListener() {
+    if (_scoreBoardController.isGameOver) {
+      _showEndGameDialog();
+    }
+    setState(() {});
+  }
+
+  Future<void> _showEndGameDialog() async {
+    bool? shouldReset = await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            String winningTeam = _scoreBoardController.match.teamA.hasWon
+                ? _scoreBoardController.match.teamA.name
+                : _scoreBoardController.match.teamB.name;
+            return BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: AlertDialog(
+                surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                title: const Text('Fim de Jogo!'),
+                content: Text(
+                    '$winningTeam atingiu ${ScoreBoardController.maxPoints} pontos. Deseja reiniciar a partida?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: const Text('Não'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: const Text('Sim'),
+                  ),
+                ],
+              ),
+            );
+          },
+        ) ??
+        false;
+
+    if (shouldReset) {
+      _scoreBoardController.resetScores();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: AnimatedBuilder(
+        animation: _scoreBoardController,
+        builder: (context, child) => TrucoButton(
+          initialMode: _scoreBoardController.riseMode,
+          onRiseModeChanged: _scoreBoardController.updateRiseMode,
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -32,7 +103,8 @@ class _ScoreBoardPageState extends State<ScoreBoardPage> {
           ),
         ],
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: _buildLayout(),
       ),
     );
@@ -40,46 +112,33 @@ class _ScoreBoardPageState extends State<ScoreBoardPage> {
 
   Widget _buildLayout() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: AnimatedBuilder(
-                animation: _scoreBoardController,
-                builder: (context, child) => ScoreWidget(
-                  teamName: "Equipe 1",
-                  score: _scoreBoardController.team1Score,
-                  onAdd: _scoreBoardController.addPointTeam1,
-                  onSubtract: _scoreBoardController.subtractPointTeam1,
-                ),
+              child: ScoreWidget(
+                teamName: _scoreBoardController.match.teamA.name,
+                score: _scoreBoardController.match.teamA.score,
+                onAdd: _scoreBoardController.addPointTeamA,
+                onSubtract: _scoreBoardController.subtractPointTeamA,
+                riseMode: _scoreBoardController.riseMode,
               ),
             ),
             Expanded(
-              child: AnimatedBuilder(
-                animation: _scoreBoardController,
-                builder: (BuildContext context, Widget? child) {
-                  return ScoreWidget(
-                    teamName: "Equipe 2",
-                    score: _scoreBoardController.team2Score,
-                    onAdd: _scoreBoardController.addPointTeam2,
-                    onSubtract: _scoreBoardController.subtractPointTeam2,
-                  );
-                },
+              child: ScoreWidget(
+                teamName: _scoreBoardController.match.teamB.name,
+                score: _scoreBoardController.match.teamB.score,
+                riseMode: _scoreBoardController.riseMode,
+                onAdd: _scoreBoardController.addPointTeamB,
+                onSubtract: _scoreBoardController.subtractPointTeamB,
               ),
             ),
           ],
         ),
-        TrucoButton(onRiseModeChanged: (value) => {},)
-   
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    _scoreBoardController.dispose();
-    super.dispose();
   }
 }

@@ -2,42 +2,30 @@ import 'package:cardmate/shared/enums/rise_mode.dart';
 import 'package:flutter/material.dart';
 
 class TrucoButton extends StatefulWidget {
+  final RiseMode initialMode;
   final ValueChanged<RiseMode> onRiseModeChanged;
 
-  const TrucoButton({Key? key, required this.onRiseModeChanged}) : super(key: key);
+  const TrucoButton(
+      {super.key, required this.onRiseModeChanged, required this.initialMode});
 
   @override
   State<TrucoButton> createState() => _TrucoButtonState();
 }
 
 class _TrucoButtonState extends State<TrucoButton> {
-  RiseMode _currentMode = RiseMode.none;
-
-  void _nextMode() {
-    setState(() {
-      switch (_currentMode) {
-        case RiseMode.none:
-          _currentMode = RiseMode.truco;
-          break;
-        case RiseMode.truco:
-          _currentMode = RiseMode.six;
-          break;
-        case RiseMode.six:
-          _currentMode = RiseMode.nine;
-          break;
-        case RiseMode.nine:
-          _currentMode = RiseMode.twelve;
-          break;
-        case RiseMode.twelve:
-          _currentMode = RiseMode.none; 
-          break;
-      }
-      widget.onRiseModeChanged(_currentMode);
-    });
+  @override
+  void initState() {
+    super.initState();
   }
 
+  void _nextMode() {
+    widget.onRiseModeChanged(widget.initialMode.next);
+  }
+
+
+
   String _getButtonLabel() {
-    switch (_currentMode) {
+    switch (widget.initialMode) {
       case RiseMode.none:
         return 'truco!';
       case RiseMode.truco:
@@ -54,9 +42,9 @@ class _TrucoButtonState extends State<TrucoButton> {
   }
 
   Color _getButtonColor() {
-    switch (_currentMode) {
+    switch (widget.initialMode) {
       case RiseMode.none:
-        return Colors.black;
+        return Colors.redAccent;
       case RiseMode.truco:
         return Colors.red;
       case RiseMode.six:
@@ -66,21 +54,33 @@ class _TrucoButtonState extends State<TrucoButton> {
       case RiseMode.twelve:
         return Colors.green;
       default:
-        return Colors.black;
+        return Colors.red;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      label: Text(
-        _getButtonLabel(),
-        style: TextStyle(color: _getButtonColor()),
-      ),
-      onPressed: _nextMode,
-      icon: Icon(
-        Icons.local_fire_department,
-        color: _getButtonColor(),
+    return Material(
+      color: _getButtonColor(),
+      child: InkWell(
+        onTap: () => _nextMode(),
+        child: SizedBox(
+          height: 100,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.local_fire_department,
+                color: Colors.white,
+              ),
+              Text(
+                _getButtonLabel(),
+                style: const TextStyle(color: Colors.white),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
