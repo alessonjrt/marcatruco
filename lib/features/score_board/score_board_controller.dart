@@ -25,7 +25,9 @@ class ScoreBoardController extends ChangeNotifier {
   void addPointTeamA(int value) {
     if (!match.teamA.hasWon) {
       match.teamA.addScore(value);
-      _updateMatchInStorage();
+      if (value > 0) {
+        _updateMatchInStorage(); 
+      }
       notifyListeners();
       updateRiseMode(RiseMode.none);
       _checkGameOver();
@@ -35,7 +37,9 @@ class ScoreBoardController extends ChangeNotifier {
   void addPointTeamB(int value) {
     if (!match.teamB.hasWon) {
       match.teamB.addScore(value);
-      _updateMatchInStorage();
+      if (value > 0) {
+        _updateMatchInStorage(); 
+      }
       notifyListeners();
       updateRiseMode(RiseMode.none);
       _checkGameOver();
@@ -45,15 +49,13 @@ class ScoreBoardController extends ChangeNotifier {
   void subtractPointTeamA() {
     if (match.teamA.score > 0) {
       match.teamA.subtractScore(1);
-      _updateMatchInStorage();
-      notifyListeners();
+      notifyListeners(); // Não chama _updateMatchInStorage ao subtrair
     }
   }
 
   void subtractPointTeamB() {
     if (match.teamB.score > 0) {
       match.teamB.subtractScore(1);
-      _updateMatchInStorage();
       notifyListeners();
     }
   }
@@ -68,13 +70,19 @@ class ScoreBoardController extends ChangeNotifier {
   }
 
   void resetScores() {
-    match.teamA.score = 0;
-    match.teamB.score = 0;
-    match.isGameOver = false;
-    match.startTime = DateTime.now();
-    match.endTime = null;
-    _updateMatchInStorage();
-    notifyListeners();
+    if (!match.isGameOver) {
+      match.isGameOver = true;
+      match.endTime = DateTime.now();
+      _updateMatchInStorage();
+    }
+
+    Team newTeamA = Team(name: match.teamA.name);
+    Team newTeamB = Team(name: match.teamB.name);
+    Match newMatch = Match(teamA: newTeamA, teamB: newTeamB);
+
+    match = newMatch;
+
+    notifyListeners(); 
   }
 
   void updateRiseMode(RiseMode newMode) {

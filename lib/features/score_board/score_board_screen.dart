@@ -80,6 +80,7 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
 
     if (shouldReset) {
       _scoreBoardController.resetScores();
+      
     }
   }
 

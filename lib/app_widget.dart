@@ -1,3 +1,5 @@
+import 'package:cardmate/features/history/history_screen.dart';
+import 'package:cardmate/features/menu/menu_screen.dart';
 import 'package:cardmate/features/score_board/score_board_screen.dart';
 import 'package:cardmate/features/share_result/share_result_screen.dart';
 import 'package:cardmate/shared/theme/app_theme.dart';
@@ -10,9 +12,11 @@ class CardMate extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.darkTheme,
-      initialRoute: '/',
+      initialRoute: '/menu',
       routes: {
-        '/': (context) => const ScoreBoardScreen(),
+        '/score_board': (context) => const ScoreBoardScreen(),
+        '/history': (context) => const HistoryScreen(),
+        '/menu': (context) => const MenuScreen(),
         '/share_result' : (context) => const ShareResultScreen()
       },
     );
