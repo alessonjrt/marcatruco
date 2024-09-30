@@ -1,5 +1,5 @@
-import 'package:cardmate/app_widget.dart';
-import 'package:cardmate/services/match_storage.dart';
+import 'package:marcatruco/app_widget.dart';
+import 'package:marcatruco/services/match_storage.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -7,5 +7,5 @@ Future<void> main() async {
 
   await MatchStorage().init();
 
-  runApp(const CardMate());
+  runApp(const MarcaTruco());
 }

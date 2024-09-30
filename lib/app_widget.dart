@@ -1,12 +1,12 @@
-import 'package:cardmate/features/history/history_screen.dart';
-import 'package:cardmate/features/menu/menu_screen.dart';
-import 'package:cardmate/features/score_board/score_board_screen.dart';
-import 'package:cardmate/features/share_result/share_result_screen.dart';
-import 'package:cardmate/shared/theme/app_theme.dart';
+import 'package:marcatruco/features/history/history_screen.dart';
+import 'package:marcatruco/features/menu/menu_screen.dart';
+import 'package:marcatruco/features/score_board/score_board_screen.dart';
+import 'package:marcatruco/features/share_result/share_result_screen.dart';
+import 'package:marcatruco/shared/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
-class CardMate extends StatelessWidget {
-  const CardMate({super.key});
+class MarcaTruco extends StatelessWidget {
+  const MarcaTruco({super.key});
 
   @override
   Widget build(BuildContext context) {

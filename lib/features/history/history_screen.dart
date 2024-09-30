@@ -1,5 +1,5 @@
-import 'package:cardmate/features/history/history_controller.dart';
-import 'package:cardmate/models/match.dart';
+import 'package:marcatruco/features/history/history_controller.dart';
+import 'package:marcatruco/models/match.dart';
 import 'package:flutter/material.dart';
 
 class HistoryScreen extends StatefulWidget {

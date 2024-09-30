@@ -1,8 +1,8 @@
 // lib/features/history/history_controller.dart
 
 import 'package:flutter/material.dart';
-import 'package:cardmate/models/match.dart';
-import 'package:cardmate/services/match_storage.dart';
+import 'package:marcatruco/models/match.dart';
+import 'package:marcatruco/services/match_storage.dart';
 
 class HistoryController extends ChangeNotifier {
   final MatchStorage _matchStorage = MatchStorage();

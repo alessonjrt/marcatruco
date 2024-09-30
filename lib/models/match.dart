@@ -1,4 +1,4 @@
-import 'package:cardmate/models/team.dart';
+import 'package:marcatruco/models/team.dart';
 import 'package:uuid/uuid.dart';
 
 class Match {

@@ -1,4 +1,4 @@
-import 'package:cardmate/shared/enums/rise_mode.dart';
+import 'package:marcatruco/shared/enums/rise_mode.dart';
 import 'package:flutter/material.dart';
 
 class TrucoButton extends StatefulWidget {

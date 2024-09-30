@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:cardmate/models/team.dart';
-import 'package:cardmate/shared/widgets/score_widget.dart';
-import 'package:cardmate/shared/widgets/truco_button.dart';
+import 'package:marcatruco/models/team.dart';
+import 'package:marcatruco/shared/widgets/score_widget.dart';
+import 'package:marcatruco/shared/widgets/truco_button.dart';
 import 'package:flutter/material.dart';
-import 'package:cardmate/features/score_board/score_board_controller.dart';
+import 'package:marcatruco/features/score_board/score_board_controller.dart';
 
 class ScoreBoardScreen extends StatefulWidget {
   const ScoreBoardScreen({super.key});

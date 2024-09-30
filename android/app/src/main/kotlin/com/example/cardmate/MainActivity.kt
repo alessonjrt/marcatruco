@@ -1,4 +1,4 @@
-package com.example.cardmate
+package com.example.marcatruco
 
 import io.flutter.embedding.android.FlutterActivity
 

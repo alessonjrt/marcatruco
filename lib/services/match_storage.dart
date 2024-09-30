@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:cardmate/models/match.dart';
+import 'package:marcatruco/models/match.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MatchStorage {
@@ -17,7 +17,6 @@ class MatchStorage {
 
   Map<String, Match> _matches = {};
 
-  // Retorna uma cópia imutável do mapa para evitar modificações externas
   Map<String, Match> get matches => Map.unmodifiable(_matches);
 
   bool _isInitialized = false;
@@ -54,7 +53,6 @@ class MatchStorage {
 
   void deleteMatch(String id) {
     if (_matches.containsKey(id)) {
-      // Modifica o mapa interno, que é mutável
       _matches.remove(id);
       _saveMatchesToStorage();
     }

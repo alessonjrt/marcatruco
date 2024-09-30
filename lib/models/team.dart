@@ -1,4 +1,4 @@
-import 'package:cardmate/features/score_board/score_board_controller.dart';
+import 'package:marcatruco/features/score_board/score_board_controller.dart';
 
 class Team {
   final String name;

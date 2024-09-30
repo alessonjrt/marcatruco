@@ -12,7 +12,7 @@ class MenuScreen extends StatelessWidget {
           child: Column(children: [
 
             const Text(
-              'Bem-vindo ao CardMate',
+              'Bem-vindo ao MarcaTruco',
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,

@@ -1,7 +1,7 @@
-import 'package:cardmate/models/match.dart';
-import 'package:cardmate/models/team.dart';
-import 'package:cardmate/services/match_storage.dart';
-import 'package:cardmate/shared/enums/rise_mode.dart';
+import 'package:marcatruco/models/match.dart';
+import 'package:marcatruco/models/team.dart';
+import 'package:marcatruco/services/match_storage.dart';
+import 'package:marcatruco/shared/enums/rise_mode.dart';
 import 'package:flutter/material.dart';
 
 class ScoreBoardController extends ChangeNotifier {
