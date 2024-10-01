@@ -32,11 +32,11 @@ class _ScoreWidgetState extends State<ScoreWidget> {
       clipBehavior: Clip.antiAlias,
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {
-          setState(() {
-            _isInverted = !_isInverted;
-          });
-        },
+        // onTap: () {
+        //   setState(() {
+        //     _isInverted = !_isInverted;
+        //   });
+        // },
         child: Transform(
           alignment: Alignment.center,
           transform:

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:marcatruco/models/team.dart';
+import 'package:marcatruco/shared/sheets/actions_sheet.dart';
 import 'package:marcatruco/shared/widgets/score_widget.dart';
 import 'package:marcatruco/shared/widgets/truco_button.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,7 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
                 content: Text(
                     '$winningTeam atingiu ${ScoreBoardController.maxPoints} pontos. Deseja reiniciar a partida?'),
                 actions: [
+                  IconButton(onPressed: () => Navigator.of(context).pushNamed('/share_result'), icon: const Icon(Icons.share)),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
@@ -80,7 +82,6 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
 
     if (shouldReset) {
       _scoreBoardController.resetScores();
-      
     }
   }
 
@@ -99,8 +100,8 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.grid_on),
-            onPressed: () {},
+            icon: const Icon(Icons.history),
+            onPressed: () => showMatchActionsSheet(context, _scoreBoardController.match),
           ),
         ],
       ),
@@ -126,6 +127,10 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
                 onAdd: _scoreBoardController.addPointTeamA,
                 onSubtract: _scoreBoardController.subtractPointTeamA,
                 riseMode: _scoreBoardController.riseMode,
+                onNameChanged: (String name) {
+                  _scoreBoardController.updateTeamName(
+                      _scoreBoardController.match.teamA.id, name);
+                },
               ),
             ),
             Expanded(
@@ -135,6 +140,10 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
                 riseMode: _scoreBoardController.riseMode,
                 onAdd: _scoreBoardController.addPointTeamB,
                 onSubtract: _scoreBoardController.subtractPointTeamB,
+                onNameChanged: (String name) {
+                  _scoreBoardController.updateTeamName(
+                      _scoreBoardController.match.teamB.id, name);
+                },
               ),
             ),
           ],

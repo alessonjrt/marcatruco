@@ -1,4 +1,7 @@
+// lib/features/score_board/score_board_controller.dart
+
 import 'package:marcatruco/models/match.dart';
+import 'package:marcatruco/models/match_action.dart';
 import 'package:marcatruco/models/team.dart';
 import 'package:marcatruco/services/match_storage.dart';
 import 'package:marcatruco/shared/enums/rise_mode.dart';
@@ -6,16 +9,22 @@ import 'package:flutter/material.dart';
 
 class ScoreBoardController extends ChangeNotifier {
   static const int maxPoints = 12;
-  Match match;
+  late Match match;
   RiseMode riseMode = RiseMode.none;
 
   final MatchStorage _matchStorage = MatchStorage();
+  bool _isMatchCreated = false;
 
   ScoreBoardController({
     required Team teamA,
     required Team teamB,
   }) : match = Match(teamA: teamA, teamB: teamB) {
-    _matchStorage.addMatch(match);
+    Match? lastUnfinishedMatch = _matchStorage.lastUnfinishedMatch;
+
+    if (lastUnfinishedMatch != null) {
+      match = lastUnfinishedMatch;
+      _isMatchCreated = true;
+    }
   }
 
   bool get hidden => match.teamA.score == 11 && match.teamB.score == 11;
@@ -23,10 +32,19 @@ class ScoreBoardController extends ChangeNotifier {
   bool get isGameOver => match.isGameOver;
 
   void addPointTeamA(int value) {
+    if (!_isMatchCreated) {
+      _createMatchInStorage();
+    }
+
     if (!match.teamA.hasWon) {
       match.teamA.addScore(value);
       if (value > 0) {
-        _updateMatchInStorage(); 
+        _logAction(
+          type: ActionType.add,
+          team: match.teamA,
+          points: value,
+        );
+        _updateMatchInStorage();
       }
       notifyListeners();
       updateRiseMode(RiseMode.none);
@@ -35,10 +53,19 @@ class ScoreBoardController extends ChangeNotifier {
   }
 
   void addPointTeamB(int value) {
+    if (!_isMatchCreated) {
+      _createMatchInStorage();
+    }
+
     if (!match.teamB.hasWon) {
       match.teamB.addScore(value);
       if (value > 0) {
-        _updateMatchInStorage(); 
+        _logAction(
+          type: ActionType.add,
+          team: match.teamB,
+          points: value,
+        );
+        _updateMatchInStorage();
       }
       notifyListeners();
       updateRiseMode(RiseMode.none);
@@ -49,15 +76,36 @@ class ScoreBoardController extends ChangeNotifier {
   void subtractPointTeamA() {
     if (match.teamA.score > 0) {
       match.teamA.subtractScore(1);
-      notifyListeners(); // Não chama _updateMatchInStorage ao subtrair
+      _logAction(
+        type: ActionType.subtract,
+        team: match.teamA,
+        points: 1,
+      );
+      _updateMatchInStorage();
+      notifyListeners();
     }
   }
 
   void subtractPointTeamB() {
     if (match.teamB.score > 0) {
       match.teamB.subtractScore(1);
+      _logAction(
+        type: ActionType.subtract,
+        team: match.teamB,
+        points: 1,
+      );
+      _updateMatchInStorage();
       notifyListeners();
     }
+  }
+
+  void updateTeamName(String teamId, String name) {
+    if (teamId == match.teamA.id) {
+      match.teamA.name = name;
+    } else {
+      match.teamB.name = name;
+    }
+    _updateMatchInStorage();
   }
 
   void _checkGameOver() {
@@ -78,11 +126,10 @@ class ScoreBoardController extends ChangeNotifier {
 
     Team newTeamA = Team(name: match.teamA.name);
     Team newTeamB = Team(name: match.teamB.name);
-    Match newMatch = Match(teamA: newTeamA, teamB: newTeamB);
+    match = Match(teamA: newTeamA, teamB: newTeamB);
 
-    match = newMatch;
-
-    notifyListeners(); 
+    _isMatchCreated = false;
+    notifyListeners();
   }
 
   void updateRiseMode(RiseMode newMode) {
@@ -91,6 +138,29 @@ class ScoreBoardController extends ChangeNotifier {
   }
 
   void _updateMatchInStorage() {
-    _matchStorage.updateMatch(match);
+    if (_isMatchCreated) {
+      _matchStorage.updateMatch(match);
+    }
+  }
+
+  void _createMatchInStorage() {
+    _matchStorage.addMatch(match);
+    _isMatchCreated = true;
+  }
+
+  void _logAction({
+    required ActionType type,
+    required Team team,
+    required int points,
+  }) {
+    MatchAction action = MatchAction(
+      type: type,
+      team: team,
+      points: points,
+      timestamp: DateTime.now(),
+    );
+    match.actions.add(action);
+    _updateMatchInStorage();
+    notifyListeners();
   }
 }

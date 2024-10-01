@@ -1,5 +1,3 @@
-// lib/features/history/history_controller.dart
-
 import 'package:flutter/material.dart';
 import 'package:marcatruco/models/match.dart';
 import 'package:marcatruco/services/match_storage.dart';
@@ -19,10 +17,11 @@ class HistoryController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteMatch(String id) {
+  Match? deleteMatch(String id) {
     _matchStorage.deleteMatch(id);
     _matches = _matchStorage.matches;
     notifyListeners();
+    return null;
   }
 
   void clearHistory() {
