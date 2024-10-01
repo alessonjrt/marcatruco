@@ -60,7 +60,7 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
                 content: Text(
                     '$winningTeam atingiu ${ScoreBoardController.maxPoints} pontos. Deseja reiniciar a partida?'),
                 actions: [
-                  IconButton(onPressed: () => Navigator.of(context).pushNamed('/share_result'), icon: const Icon(Icons.share)),
+                  IconButton(onPressed: () => Navigator.of(context).pushNamed('/share_result', arguments: _scoreBoardController.match), icon: const Icon(Icons.share)),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);

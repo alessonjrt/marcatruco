@@ -57,9 +57,12 @@ class MenuScreen extends StatelessWidget {
     required String route,
     required Color color,
   }) {
+    double width = MediaQuery.of(context).size.width * 0.28;
+    double height = MediaQuery.of(context).size.height * 0.1;
+
     return Container(
-      width: 112,
-      height: 86,
+      width: width + 1,
+      height: height + 1,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
@@ -80,8 +83,8 @@ class MenuScreen extends StatelessWidget {
           onTap: () => Navigator.of(context).pushNamed(route),
           child: Container(
             padding: const EdgeInsets.all(4),
-            width: 110,
-            height: 85,
+            width: width,
+            height: height,
             decoration: BoxDecoration(
               border: Border.all(width: 2, color: Colors.transparent),
               borderRadius: BorderRadius.circular(4),
@@ -101,8 +104,7 @@ class MenuScreen extends StatelessWidget {
                   child: Icon(
                     icon,
                     size: 28,
-                    color: Colors
-                        .white, 
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 20),
