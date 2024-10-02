@@ -1,5 +1,3 @@
-// lib/features/score_board/score_board_controller.dart
-
 import 'package:marcatruco/models/match.dart';
 import 'package:marcatruco/models/match_action.dart';
 import 'package:marcatruco/models/team.dart';
@@ -10,7 +8,6 @@ import 'package:flutter/material.dart';
 class ScoreBoardController extends ChangeNotifier {
   static const int maxPoints = 12;
   late Match match;
-  RiseMode riseMode = RiseMode.none;
 
   final MatchStorage _matchStorage = MatchStorage();
   bool _isMatchCreated = false;
@@ -18,7 +15,7 @@ class ScoreBoardController extends ChangeNotifier {
   ScoreBoardController({
     required Team teamA,
     required Team teamB,
-  }) : match = Match(teamA: teamA, teamB: teamB) {
+  }) : match = Match(teamA: teamA, teamB: teamB, riseMode: RiseMode.none) {
     Match? lastUnfinishedMatch = _matchStorage.lastUnfinishedMatch;
 
     if (lastUnfinishedMatch != null) {
@@ -69,6 +66,39 @@ class ScoreBoardController extends ChangeNotifier {
       }
       notifyListeners();
       updateRiseMode(RiseMode.none);
+      _checkGameOver();
+    }
+  }
+
+  void fold(
+    Team foldingTeam,
+    Team opposingTeam,
+  ) {
+    if (!_isMatchCreated) {
+      _createMatchInStorage();
+    }
+
+    int foldValue = match.riseMode.value;
+
+    Team winningTeam = opposingTeam;
+    Team losingTeam = foldingTeam;
+
+    if (!winningTeam.hasWon) {
+      winningTeam.addScore(foldValue);
+
+      if (foldValue > 0) {
+        _logAction(
+          type: ActionType.fold,
+          team: winningTeam,
+          otherTeam: losingTeam,
+          points: foldValue,
+        );
+        _updateMatchInStorage();
+      }
+
+      updateRiseMode(RiseMode.none);
+      notifyListeners();
+
       _checkGameOver();
     }
   }
@@ -126,14 +156,15 @@ class ScoreBoardController extends ChangeNotifier {
 
     Team newTeamA = Team(name: match.teamA.name);
     Team newTeamB = Team(name: match.teamB.name);
-    match = Match(teamA: newTeamA, teamB: newTeamB);
+    match = Match(teamA: newTeamA, teamB: newTeamB, riseMode: RiseMode.none);
 
     _isMatchCreated = false;
     notifyListeners();
   }
 
   void updateRiseMode(RiseMode newMode) {
-    riseMode = newMode;
+    match.riseMode = newMode;
+    _updateMatchInStorage();
     notifyListeners();
   }
 
@@ -151,12 +182,14 @@ class ScoreBoardController extends ChangeNotifier {
   void _logAction({
     required ActionType type,
     required Team team,
+    Team? otherTeam,
     required int points,
   }) {
     MatchAction action = MatchAction(
       type: type,
       team: team,
       points: points,
+      otherTeam: otherTeam,
       timestamp: DateTime.now(),
     );
     match.actions.add(action);

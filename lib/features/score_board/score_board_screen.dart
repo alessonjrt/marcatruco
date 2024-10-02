@@ -22,9 +22,9 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
     super.initState();
     _scoreBoardController = ScoreBoardController(
         teamA: Team(
-          name: 'us',
+          name: 'Nós',
         ),
-        teamB: Team(name: 'them'));
+        teamB: Team(name: 'Eles'));
     _scoreBoardController.addListener(_controllerListener);
   }
 
@@ -60,7 +60,11 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
                 content: Text(
                     '$winningTeam atingiu ${ScoreBoardController.maxPoints} pontos. Deseja reiniciar a partida?'),
                 actions: [
-                  IconButton(onPressed: () => Navigator.of(context).pushNamed('/share_result', arguments: _scoreBoardController.match), icon: const Icon(Icons.share)),
+                  IconButton(
+                      onPressed: () => Navigator.of(context).pushNamed(
+                          '/share_result',
+                          arguments: _scoreBoardController.match),
+                      icon: const Icon(Icons.share)),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
@@ -91,7 +95,7 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
       bottomNavigationBar: AnimatedBuilder(
         animation: _scoreBoardController,
         builder: (context, child) => TrucoButton(
-          initialMode: _scoreBoardController.riseMode,
+          currentMode: _scoreBoardController.match.riseMode,
           onRiseModeChanged: _scoreBoardController.updateRiseMode,
         ),
       ),
@@ -101,54 +105,60 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.history),
-            onPressed: () => showMatchActionsSheet(context, _scoreBoardController.match),
+            onPressed: () =>
+                showMatchActionsSheet(context, _scoreBoardController.match),
           ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: _buildLayout(),
-      ),
-    );
-  }
-
-  Widget _buildLayout() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: ScoreWidget(
-                teamName: _scoreBoardController.match.teamA.name,
-                score: _scoreBoardController.match.teamA.score,
-                onAdd: _scoreBoardController.addPointTeamA,
-                onSubtract: _scoreBoardController.subtractPointTeamA,
-                riseMode: _scoreBoardController.riseMode,
-                onNameChanged: (String name) {
-                  _scoreBoardController.updateTeamName(
-                      _scoreBoardController.match.teamA.id, name);
-                },
-              ),
-            ),
-            Expanded(
-              child: ScoreWidget(
-                teamName: _scoreBoardController.match.teamB.name,
-                score: _scoreBoardController.match.teamB.score,
-                riseMode: _scoreBoardController.riseMode,
-                onAdd: _scoreBoardController.addPointTeamB,
-                onSubtract: _scoreBoardController.subtractPointTeamB,
-                onNameChanged: (String name) {
-                  _scoreBoardController.updateTeamName(
-                      _scoreBoardController.match.teamB.id, name);
-                },
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: ScoreWidget(
+                    team: _scoreBoardController.match.teamA,
+                    onAdd: _scoreBoardController.addPointTeamA,
+                    onSubtract: _scoreBoardController.subtractPointTeamA,
+                    riseMode: _scoreBoardController.match.riseMode,
+                    onFold: () {
+                          _scoreBoardController.fold(
+                          _scoreBoardController.match.teamA,
+                          _scoreBoardController.match.teamB);
+                    },
+                    onNameChanged: (String name) {
+                      _scoreBoardController.updateTeamName(
+                          _scoreBoardController.match.teamA.id, name);
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: ScoreWidget(
+                    team: _scoreBoardController.match.teamB,
+                    riseMode: _scoreBoardController.match.riseMode,
+                    onAdd: _scoreBoardController.addPointTeamB,
+                    onSubtract: _scoreBoardController.subtractPointTeamB,
+                    onNameChanged: (String name) {
+                      _scoreBoardController.updateTeamName(
+                          _scoreBoardController.match.teamB.id, name);
+                    },
+                    onFold: () {
+                      _scoreBoardController.fold(
+                          _scoreBoardController.match.teamB,
+                          _scoreBoardController.match.teamA);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }

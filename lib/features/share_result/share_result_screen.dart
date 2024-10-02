@@ -4,11 +4,10 @@ import 'package:marcatruco/models/match.dart';
 import 'package:marcatruco/models/team.dart';
 import 'dart:math';
 
-import 'package:marcatruco/shared/assets/assets.dart';
 import 'package:marcatruco/shared/widgets/duck.dart';
 
 class ShareResultScreen extends StatefulWidget {
-  const ShareResultScreen({Key? key}) : super(key: key);
+  const ShareResultScreen({super.key});
 
   @override
   State<ShareResultScreen> createState() => _ShareResultScreenState();
@@ -172,7 +171,7 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                       Expanded(
                         child: Column(
                           children: [
-                            Duck(width: 80,),
+                            const Duck(width: 80,),
                             const SizedBox(height: 10),
                             Text(
                               losers.name,

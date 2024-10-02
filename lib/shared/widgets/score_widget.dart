@@ -1,22 +1,22 @@
+import 'package:marcatruco/models/team.dart';
 import 'package:marcatruco/shared/enums/rise_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class ScoreWidget extends StatefulWidget {
-  final String teamName;
-  final int score;
+  final Team team;
   final void Function(int value) onAdd;
   final VoidCallback onSubtract;
+  final VoidCallback onFold;
   final void Function(String)? onNameChanged;
   final RiseMode riseMode;
   const ScoreWidget(
       {super.key,
-      required this.teamName,
-      required this.score,
       required this.onAdd,
       required this.onSubtract,
       this.onNameChanged,
-      required this.riseMode});
+      required this.riseMode,
+      required this.onFold, required this.team});
 
   @override
   State<ScoreWidget> createState() => _ScoreWidgetState();
@@ -47,7 +47,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
             children: <Widget>[
               TextFormField(
                 onChanged: widget.onNameChanged,
-                initialValue: widget.teamName,
+                initialValue: widget.team.name,
                 textAlign: TextAlign.center,
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -63,13 +63,13 @@ class _ScoreWidgetState extends State<ScoreWidget> {
               Badge(
                 backgroundColor: Colors.transparent,
                 alignment: Alignment.centerRight,
-                isLabelVisible: widget.score >= 10 && widget.score != 12,
+                isLabelVisible: widget.team.score >= 10 && widget.team.score != 12,
                 offset: const Offset(-18, 25),
                 label: Lottie.asset(width: 30, 'assets/animations/fire.json'),
                 child: Text(
-                  widget.score.toString(),
+                 widget.team.score.toString(),
                   style: TextStyle(
-                      color: widget.score != 12
+                      color: widget.team.score != 12
                           ? Colors.white
                           : Colors.amberAccent,
                       fontWeight: FontWeight.bold,
@@ -106,6 +106,14 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                   ),
                 ],
               ),
+              Visibility(
+                visible: widget.riseMode != RiseMode.none,
+                child: TextButton.icon(
+                  onPressed: widget.onFold,
+                  icon: const Text('correr'),
+                  label: const Icon(Icons.directions_run),
+                ),
+              )
             ],
           ),
         ),

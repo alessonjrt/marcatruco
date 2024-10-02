@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:marcatruco/models/match.dart';
 import 'package:marcatruco/models/match_action.dart';
+
 void showMatchActionsSheet(BuildContext context, Match match) {
   showModalBottomSheet(
     context: context,
@@ -47,11 +48,21 @@ void showMatchActionsSheet(BuildContext context, Match match) {
                         final team = action.team.id == match.teamA.id
                             ? match.teamA
                             : match.teamB;
-      
+                            
+
+                        String actionDescription;
+                        if (action.type == ActionType.add) {
+                          actionDescription = '${team.name} adicionou ${action.points} ponto(s).';
+                        } else if (action.type == ActionType.subtract) {
+                          actionDescription = '${team.name} removeu ${action.points} ponto(s).';
+                        } else {
+                          actionDescription = '${action.otherTeam?.name} correu adicionando ${action.points} ponto(s) para ${action.team.name}.';
+                        }
+
                         return ListTile(
                           leading: _getActionIcon(action.type),
                           title: Text(
-                            '${team.name} ${action.type == ActionType.add ? 'adicionou' : 'removeu'} ${action.points} ponto(s).',
+                            actionDescription,
                             style: const TextStyle(fontSize: 16),
                           ),
                           subtitle: Text(
@@ -67,8 +78,6 @@ void showMatchActionsSheet(BuildContext context, Match match) {
       ),
     ),
   );
-
-  
 }
 
 String _formatTimestamp(DateTime timestamp) {
@@ -82,8 +91,9 @@ Icon _getActionIcon(ActionType type) {
       return const Icon(Icons.add, color: Colors.green);
     case ActionType.subtract:
       return const Icon(Icons.remove, color: Colors.red);
+    case ActionType.fold:
+      return const Icon(Icons.directions_run, color: Colors.purple);
     default:
       return const Icon(Icons.help_outline, color: Colors.grey);
   }
 }
-
