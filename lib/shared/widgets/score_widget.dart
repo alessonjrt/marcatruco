@@ -1,7 +1,7 @@
-import 'package:marcatruco/models/team.dart';
-import 'package:marcatruco/shared/enums/rise_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:marcatruco/models/team.dart';
+import 'package:marcatruco/shared/enums/rise_mode.dart';
 
 class ScoreWidget extends StatefulWidget {
   final Team team;
@@ -16,14 +16,15 @@ class ScoreWidget extends StatefulWidget {
       required this.onSubtract,
       this.onNameChanged,
       required this.riseMode,
-      required this.onFold, required this.team});
+      required this.onFold,
+      required this.team});
 
   @override
   State<ScoreWidget> createState() => _ScoreWidgetState();
 }
 
 class _ScoreWidgetState extends State<ScoreWidget> {
-  bool _isInverted = false;
+  final bool _isInverted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +64,12 @@ class _ScoreWidgetState extends State<ScoreWidget> {
               Badge(
                 backgroundColor: Colors.transparent,
                 alignment: Alignment.centerRight,
-                isLabelVisible: widget.team.score >= 10 && widget.team.score != 12,
+                isLabelVisible:
+                    widget.team.score >= 10 && widget.team.score != 12,
                 offset: const Offset(-18, 25),
                 label: Lottie.asset(width: 30, 'assets/animations/fire.json'),
                 child: Text(
-                 widget.team.score.toString(),
+                  widget.team.score.toString(),
                   style: TextStyle(
                       color: widget.team.score != 12
                           ? Colors.white

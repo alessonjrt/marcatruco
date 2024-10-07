@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 
 class ShameCam extends StatefulWidget {
   final bool hideFlashButton;
-  const ShameCam({super.key,  this.hideFlashButton = false});
+  const ShameCam({super.key, this.hideFlashButton = false});
 
   @override
   State<ShameCam> createState() => _ShameCamState();
@@ -12,7 +12,7 @@ class ShameCam extends StatefulWidget {
 class _ShameCamState extends State<ShameCam> {
   List<CameraDescription> _cameras = [];
   CameraController? _cameraController;
-  int _currentCameraIndex = 0;
+  final int _currentCameraIndex = 0;
   bool _isFlashOn = false;
   String? _error;
 
@@ -22,7 +22,6 @@ class _ShameCamState extends State<ShameCam> {
     _initializeCameras();
   }
 
-  // Inicializa todas as câmeras disponíveis e seleciona a primeira
   Future<void> _initializeCameras() async {
     try {
       _cameras = await availableCameras();
@@ -31,18 +30,16 @@ class _ShameCamState extends State<ShameCam> {
         throw Exception('Nenhuma câmera disponível');
       }
 
-      // Inicializa a primeira câmera (geralmente traseira)
       _initializeCameraController(_cameras[_currentCameraIndex]);
     } catch (e) {
-      print('Erro ao inicializar as câmeras: $e');
       setState(() {
         _error = e.toString();
       });
     }
   }
 
-  // Inicializa o controlador da câmera selecionada
-  Future<void> _initializeCameraController(CameraDescription cameraDescription) async {
+  Future<void> _initializeCameraController(
+      CameraDescription cameraDescription) async {
     _cameraController?.dispose();
 
     _cameraController = CameraController(
@@ -55,50 +52,26 @@ class _ShameCamState extends State<ShameCam> {
     try {
       await _cameraController!.initialize();
 
-
       if (!mounted) return;
       setState(() {});
     } catch (e) {
-      print('Erro ao inicializar o controlador da câmera: $e');
       setState(() {
         _error = e.toString();
       });
     }
   }
 
-  // Alterna entre as câmeras disponíveis
-  void _switchCamera() {
-    if (_cameras.length < 2) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Não há outra câmera disponível')),
-      );
+  void _toggleFlash() async {
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
       return;
     }
-
-    setState(() {
-      _currentCameraIndex = (_currentCameraIndex + 1) % _cameras.length;
-      _isFlashOn = false; // Reseta o flash ao mudar a câmera
-    });
-
-    _initializeCameraController(_cameras[_currentCameraIndex]);
-  }
-
-  void _toggleFlash() async {
-    if (_cameraController == null || !_cameraController!.value.isInitialized) return;
-   
 
     setState(() {
       _isFlashOn = !_isFlashOn;
     });
 
-    try {
-      await _cameraController!.setFlashMode(_isFlashOn ? FlashMode.torch : FlashMode.off);
-    } catch (e) {
-      print('Erro ao alternar o flash: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao alternar o flash: $e')),
-      );
-    }
+    await _cameraController!
+        .setFlashMode(_isFlashOn ? FlashMode.torch : FlashMode.off);
   }
 
   @override
@@ -113,11 +86,10 @@ class _ShameCamState extends State<ShameCam> {
       width: 250,
       height: 250,
       decoration: BoxDecoration(
-      
-        borderRadius: BorderRadius.circular(12), 
+        borderRadius: BorderRadius.circular(12),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12), 
+        borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
             _error != null
@@ -128,30 +100,30 @@ class _ShameCamState extends State<ShameCam> {
                       style: const TextStyle(color: Colors.red),
                     ),
                   )
-                : (_cameraController != null && _cameraController!.value.isInitialized)
+                : (_cameraController != null &&
+                        _cameraController!.value.isInitialized)
                     ? SizedBox(
-                      width: 250,
-                      height: 250,
-                      child: CameraPreview(_cameraController!))
+                        width: 250,
+                        height: 250,
+                        child: CameraPreview(_cameraController!))
                     : const Center(child: CircularProgressIndicator()),
-            if(widget.hideFlashButton)
-            Positioned(
-              bottom: 10,
-              left: 10,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      _isFlashOn ? Icons.flash_on : Icons.flash_off,
-                      color: Colors.white,
-                      size: 30,
+            if (widget.hideFlashButton)
+              Positioned(
+                bottom: 10,
+                left: 10,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      onPressed: _toggleFlash,
                     ),
-                    onPressed: _toggleFlash,
-                  ),
-                
-                ],
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),

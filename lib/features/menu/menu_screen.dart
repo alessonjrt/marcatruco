@@ -34,14 +34,14 @@ class MenuScreen extends StatelessWidget {
                       route: '/history',
                       color: Colors.white,
                     ),
-                    const SizedBox(width: 10),
-                    _buildMenuButton(
-                      context,
-                      title: 'Opções',
-                      icon: Icons.settings,
-                      route: '/history',
-                      color: Colors.white,
-                    ),
+                    // const SizedBox(width: 10),
+                    // _buildMenuButton(
+                    //   context,
+                    //   title: 'Opções',
+                    //   icon: Icons.settings,
+                    //   route: '/history',
+                    //   color: Colors.white,
+                    // ),
                   ],
                 ),
               ],
@@ -58,7 +58,7 @@ class MenuScreen extends StatelessWidget {
     required Color color,
   }) {
     double width = MediaQuery.of(context).size.width * 0.28;
-    double height = MediaQuery.of(context).size.height * 0.1;
+    double height = MediaQuery.of(context).size.height * 0.11;
 
     return Container(
       width: width + 1,

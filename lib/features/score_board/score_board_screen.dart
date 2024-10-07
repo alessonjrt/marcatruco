@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:marcatruco/features/score_board/score_board_controller.dart';
 import 'package:marcatruco/models/team.dart';
 import 'package:marcatruco/shared/sheets/actions_sheet.dart';
 import 'package:marcatruco/shared/widgets/score_widget.dart';
 import 'package:marcatruco/shared/widgets/truco_button.dart';
-import 'package:flutter/material.dart';
-import 'package:marcatruco/features/score_board/score_board_controller.dart';
 
 class ScoreBoardScreen extends StatefulWidget {
   const ScoreBoardScreen({super.key});
@@ -101,6 +101,10 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[
           IconButton(
@@ -127,7 +131,7 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
                     onSubtract: _scoreBoardController.subtractPointTeamA,
                     riseMode: _scoreBoardController.match.riseMode,
                     onFold: () {
-                          _scoreBoardController.fold(
+                      _scoreBoardController.fold(
                           _scoreBoardController.match.teamA,
                           _scoreBoardController.match.teamB);
                     },
