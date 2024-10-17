@@ -24,23 +24,21 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
   final WidgetsToImageController _widgetsToImageController =
       WidgetsToImageController();
 
-  // Variável para controlar a visibilidade do ShameCam
   final bool _showShameCam = false;
 
-  // Variável para controlar o estado de captura
   bool _isCapturing = false;
 
   final List<String> teasingPhrases = [
-    "Que surra! Vai um óculos pra enxergar o jogo melhor?",
+    "Essa era café com leite.",
     "A sorte de vocês tá mais escassa que água no deserto!",
     "Estudem mais Truco, ou vão continuar apanhando assim!",
     "Foi bonito... se a intenção era fazer a gente rir!",
     "Na próxima, talvez vocês pelo menos assustem!",
     "Não fiquem tristes, perder é a especialidade de vocês!",
-    "Vocês jogaram bem... bem mal, aliás!",
-    "Truco? Mais pra Truco de mentirinha, né?!",
-    "Cagaram no baralho e ainda fizeram pose!",
-    "Se matasse empatava, mas nem isso conseguiram!"
+    "Na cara não, pra não estragar o velório.",
+    "Que sapeco!",
+    "C*garam na mão e jogaram na cara...",
+    "Se matasse, empatava!"
   ];
 
   @override
@@ -78,24 +76,19 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
     });
 
     try {
-      // Pequena pausa para garantir que a UI seja atualizada
       await Future.delayed(const Duration(milliseconds: 100));
 
       final imageBytes = await _widgetsToImageController.capture();
 
       if (imageBytes != null) {
-        // Obter o diretório para salvar a imagem
         final directory = await getApplicationDocumentsDirectory();
         final imagePath = '${directory.path}/captured_image.png';
         final imageFile = File(imagePath);
 
-        // Escrever os bytes da imagem no arquivo
         await imageFile.writeAsBytes(imageBytes);
 
-        // Criar um XFile a partir do arquivo salvo
         final xfile = XFile(imagePath);
 
-        // Compartilhar a imagem usando share_plus
         await Share.shareXFiles(
           [xfile],
           text: 'Confira meu resultado no Truco!',
