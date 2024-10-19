@@ -1,7 +1,7 @@
-import 'package:marcatruco/features/history/history_controller.dart';
-import 'package:marcatruco/models/match.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:marcatruco/features/history/history_controller.dart';
+import 'package:marcatruco/models/match.dart';
 import 'package:marcatruco/models/team.dart';
 import 'package:marcatruco/shared/sheets/actions_sheet.dart';
 
@@ -32,7 +32,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   void _updateMatches() {
-    // Atualiza a lista local com possíveis mudanças no controlador
     setState(() {
       _matchesList = _historyController.matches.entries.toList();
     });
@@ -42,16 +41,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
-        title: const Text('Histórico de Partidas'),
+        title: Text(
+          'Histórico de Partidas',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         centerTitle: true,
       ),
       body: _matchesList.isEmpty
-          ? const Center(
+          ? Center(
               child: Text(
                 'Nenhuma partida salva.',
-                style: TextStyle(fontSize: 18),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             )
           : AnimatedList(
@@ -77,34 +77,28 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final Team firstTeam = teamAWins ? match.teamA : match.teamB;
     final Team secondTeam = teamAWins ? match.teamB : match.teamA;
 
-    TextStyle firstTeamStyle = firstTeam.score == 12
-        ? const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.amber,
-          )
-        : const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          );
+    TextStyle firstTeamStyle = (firstTeam.score == 12
+            ? Theme.of(context).textTheme.titleLarge
+            : Theme.of(context).textTheme.titleMedium)!
+        .copyWith(
+      fontWeight: FontWeight.bold,
+      color: firstTeam.score == 12 ? Colors.amber : null,
+    );
 
-    TextStyle secondTeamStyle = secondTeam.score == 12
-        ? const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.amber,
-          )
-        : const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          );
+    TextStyle secondTeamStyle = (secondTeam.score == 12
+            ? Theme.of(context).textTheme.titleLarge
+            : Theme.of(context).textTheme.titleMedium)!
+        .copyWith(
+      fontWeight: FontWeight.bold,
+      color: secondTeam.score == 12 ? Colors.amber : null,
+    );
 
     return SizeTransition(
       sizeFactor: animation,
       child: GestureDetector(
         onTap: () => showMatchActionsSheet(context, match),
         child: Card(
-          color: const Color.fromARGB(255, 22, 22, 22),
+          color: Theme.of(context).colorScheme.surface,
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           elevation: 4,
           shape:
@@ -114,14 +108,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(formattedStartTime),
+                Text(
+                  formattedStartTime,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
                 const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
@@ -145,18 +141,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       ],
                     ),
                     IconButton(
-                        onPressed: () async {
-                          bool response =
-                              await _showDeleteDialog(matchKey, index);
+                      onPressed: () async {
+                        bool response =
+                            await _showDeleteDialog(matchKey, index);
 
-                          if (response) {
-                            _removeMatch(matchKey, index);
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ))
+                        if (response) {
+                          _removeMatch(matchKey, index);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    )
                   ],
                 ),
               ],
@@ -172,21 +169,34 @@ class _HistoryScreenState extends State<HistoryScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('Excluir Partida'),
-              content: const Text(
-                  'Você tem certeza que deseja excluir esta partida?'),
+              title: Text(
+                'Excluir Partida',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              content: Text(
+                'Você tem certeza que deseja excluir esta partida?',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(false); // Fecha o diálogo
                   },
-                  child: const Text('Cancelar'),
+                  child: Text(
+                    'Cancelar',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(true); // Fecha o diálogo
                   },
-                  child: const Text('Excluir'),
+                  child: Text(
+                    'Excluir',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                  ),
                 ),
               ],
             );
@@ -202,9 +212,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       index,
       (context, animation) => _buildMatchCard(
           removedMatch.value, removedMatch.key, animation, index),
-      duration: const Duration(
-          milliseconds:
-              130), // Aumentei a duração para 300ms para uma animação mais suave
+      duration: const Duration(milliseconds: 130),
     );
   }
 }

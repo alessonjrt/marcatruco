@@ -24,7 +24,6 @@ class MenuScreen extends StatelessWidget {
                       title: 'Jogar',
                       icon: Icons.play_arrow_rounded,
                       route: '/score_board',
-                      color: Colors.white,
                     ),
                     const SizedBox(width: 10),
                     _buildMenuButton(
@@ -32,15 +31,14 @@ class MenuScreen extends StatelessWidget {
                       title: 'Histórico',
                       icon: Icons.history,
                       route: '/history',
-                      color: Colors.white,
                     ),
+                    // Você pode descomentar e ajustar este botão se necessário
                     // const SizedBox(width: 10),
                     // _buildMenuButton(
                     //   context,
                     //   title: 'Opções',
                     //   icon: Icons.settings,
-                    //   route: '/history',
-                    //   color: Colors.white,
+                    //   route: '/options',
                     // ),
                   ],
                 ),
@@ -55,7 +53,6 @@ class MenuScreen extends StatelessWidget {
     required String title,
     required IconData icon,
     required String route,
-    required Color color,
   }) {
     double width = MediaQuery.of(context).size.width * 0.28;
     double height = MediaQuery.of(context).size.height * 0.11;
@@ -70,8 +67,8 @@ class MenuScreen extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.grey.shade300,
-            Colors.grey.shade600,
+            Theme.of(context).colorScheme.primary.withOpacity(0.3),
+            Theme.of(context).colorScheme.primary.withOpacity(0.6),
           ],
         ),
       ),
@@ -92,40 +89,18 @@ class MenuScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.grey.shade300,
-                      Colors.grey.shade600,
-                    ],
-                  ).createShader(bounds),
-                  child: Icon(
-                    icon,
-                    size: 28,
-                    color: Colors.white,
-                  ),
+                Icon(
+                  icon,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: 20),
-                ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.grey.shade300,
-                      Colors.grey.shade600,
-                    ],
-                  ).createShader(bounds),
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          Colors.white, // Cor base antes de aplicar o degradê
-                    ),
-                  ),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                 ),
               ],
             ),

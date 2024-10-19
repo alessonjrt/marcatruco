@@ -1,5 +1,5 @@
-import 'package:marcatruco/shared/enums/rise_mode.dart';
 import 'package:flutter/material.dart';
+import 'package:marcatruco/shared/enums/rise_mode.dart';
 
 class TrucoButton extends StatelessWidget {
   final RiseMode currentMode;
@@ -11,16 +11,14 @@ class TrucoButton extends StatelessWidget {
     required this.currentMode,
   });
 
- 
   void _nextMode() {
-   onRiseModeChanged(currentMode.next);
+    onRiseModeChanged(currentMode.next);
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: _getButtonColor(),
+      color: _getButtonColor(context),
       child: InkWell(
         onTap: _nextMode,
         child: SizedBox(
@@ -29,15 +27,17 @@ class TrucoButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.local_fire_department,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
-              const SizedBox(width: 8), 
+              const SizedBox(width: 8),
               Text(
                 _getButtonLabel(),
-                style: const TextStyle(color: Colors.white, fontSize: 18),
-              )
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+              ),
             ],
           ),
         ),
@@ -45,7 +45,7 @@ class TrucoButton extends StatelessWidget {
     );
   }
 
-   String _getLabel(RiseMode mode) {
+  String _getLabel(RiseMode mode) {
     switch (mode) {
       case RiseMode.none:
         return 'Truco!';
@@ -56,7 +56,7 @@ class TrucoButton extends StatelessWidget {
       case RiseMode.nine:
         return 'Doze!';
       case RiseMode.twelve:
-        return 'Ta valendo tudo!!';
+        return 'Tá valendo tudo!!';
       default:
         return 'Start Truco';
     }
@@ -67,21 +67,20 @@ class TrucoButton extends StatelessWidget {
     return '$nextAction (${currentMode.value})';
   }
 
-  Color _getButtonColor() {
+  Color _getButtonColor(BuildContext context) {
     switch (currentMode) {
       case RiseMode.none:
-        return Colors.redAccent;
+        return Theme.of(context).colorScheme.primary;
       case RiseMode.truco:
-        return Colors.red;
+        return Theme.of(context).colorScheme.secondary;
       case RiseMode.six:
-        return Colors.orange;
+        return Theme.of(context).colorScheme.tertiaryContainer;
       case RiseMode.nine:
-        return Colors.blue;
+        return Theme.of(context).colorScheme.error;
       case RiseMode.twelve:
-        return Colors.green;
+        return Theme.of(context).colorScheme.surfaceContainerHighest;
       default:
-        return Colors.red;
+        return Theme.of(context).colorScheme.primary;
     }
   }
-
 }

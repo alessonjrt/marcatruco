@@ -10,14 +10,16 @@ class ScoreWidget extends StatefulWidget {
   final VoidCallback onFold;
   final void Function(String)? onNameChanged;
   final RiseMode riseMode;
-  const ScoreWidget(
-      {super.key,
-      required this.onAdd,
-      required this.onSubtract,
-      this.onNameChanged,
-      required this.riseMode,
-      required this.onFold,
-      required this.team});
+
+  const ScoreWidget({
+    super.key,
+    required this.onAdd,
+    required this.onSubtract,
+    this.onNameChanged,
+    required this.riseMode,
+    required this.onFold,
+    required this.team,
+  });
 
   @override
   State<ScoreWidget> createState() => _ScoreWidgetState();
@@ -55,11 +57,12 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(0, 234, 221, 221)),
+                    borderSide: BorderSide(color: Colors.transparent),
                   ),
                 ),
-                style: const TextStyle(color: Colors.white, fontSize: 38),
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
               ),
               Badge(
                 backgroundColor: Colors.transparent,
@@ -67,15 +70,18 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                 isLabelVisible:
                     widget.team.score >= 10 && widget.team.score != 12,
                 offset: const Offset(-18, 25),
-                label: Lottie.asset(width: 30, 'assets/animations/fire.json'),
+                label: Lottie.asset(
+                  width: 30,
+                  'assets/animations/fire.json',
+                ),
                 child: Text(
                   widget.team.score.toString(),
-                  style: TextStyle(
-                      color: widget.team.score != 12
-                          ? Colors.white
-                          : Colors.amberAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 112),
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: widget.team.score != 12
+                            ? Theme.of(context).colorScheme.onSurface
+                            : Colors.amberAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               Row(
@@ -83,24 +89,31 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   IconButton(
-                      icon: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
-                      ),
-                      onPressed: widget.onSubtract),
+                    icon: Icon(
+                      Icons.remove,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    onPressed: widget.onSubtract,
+                  ),
                   IconButton(
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                     icon: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.add,
+                          color: Theme.of(context).colorScheme.onError,
                         ),
                         Text(
                           '${widget.riseMode.value}',
-                          style: const TextStyle(color: Colors.red),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.onError,
+                              ),
                         )
                       ],
                     ),
@@ -112,10 +125,19 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                 visible: widget.riseMode != RiseMode.none,
                 child: TextButton.icon(
                   onPressed: widget.onFold,
-                  icon: const Text('correr'),
-                  label: const Icon(Icons.directions_run),
+                  icon: Text(
+                    'Correr',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  label: Icon(
+                    Icons.directions_run,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),

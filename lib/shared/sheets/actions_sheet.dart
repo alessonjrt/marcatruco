@@ -20,25 +20,22 @@ void showMatchActionsSheet(BuildContext context, Match match) {
               width: 50,
               height: 5,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               'Histórico de Ações',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const Divider(),
             Expanded(
               child: match.actions.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         'Nenhuma ação registrada.',
-                        style: TextStyle(fontSize: 16),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     )
                   : ListView.builder(
@@ -48,26 +45,34 @@ void showMatchActionsSheet(BuildContext context, Match match) {
                         final team = action.team.id == match.teamA.id
                             ? match.teamA
                             : match.teamB;
-                            
 
                         String actionDescription;
                         if (action.type == ActionType.add) {
-                          actionDescription = '${team.name} adicionou ${action.points} ponto(s).';
+                          actionDescription =
+                              '${team.name} adicionou ${action.points} ponto(s).';
                         } else if (action.type == ActionType.subtract) {
-                          actionDescription = '${team.name} removeu ${action.points} ponto(s).';
+                          actionDescription =
+                              '${team.name} removeu ${action.points} ponto(s).';
                         } else {
-                          actionDescription = '${action.otherTeam?.name} correu adicionando ${action.points} ponto(s) para ${action.team.name}.';
+                          actionDescription =
+                              '${action.otherTeam?.name} correu adicionando ${action.points} ponto(s) para ${action.team.name}.';
                         }
 
                         return ListTile(
-                          leading: _getActionIcon(action.type),
+                          leading: _getActionIcon(context, action.type),
                           title: Text(
                             actionDescription,
-                            style: const TextStyle(fontSize: 16),
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           subtitle: Text(
                             _formatTimestamp(action.timestamp),
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withOpacity(0.6),
+                                    ),
                           ),
                         );
                       },
@@ -85,15 +90,17 @@ String _formatTimestamp(DateTime timestamp) {
   return formatter.format(timestamp);
 }
 
-Icon _getActionIcon(ActionType type) {
+Icon _getActionIcon(BuildContext context, ActionType type) {
   switch (type) {
     case ActionType.add:
-      return const Icon(Icons.add, color: Colors.green);
+      return Icon(Icons.add, color: Theme.of(context).colorScheme.primary);
     case ActionType.subtract:
-      return const Icon(Icons.remove, color: Colors.red);
+      return Icon(Icons.remove, color: Theme.of(context).colorScheme.error);
     case ActionType.fold:
-      return const Icon(Icons.directions_run, color: Colors.purple);
+      return Icon(Icons.directions_run,
+          color: Theme.of(context).colorScheme.secondary);
     default:
-      return const Icon(Icons.help_outline, color: Colors.grey);
+      return Icon(Icons.help_outline,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6));
   }
 }

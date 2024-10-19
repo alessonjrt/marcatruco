@@ -137,7 +137,10 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
             visible: !_isCapturing,
             child: IconButton(
               onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.chevron_left_rounded),
+              icon: Icon(
+                Icons.chevron_left_rounded,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -159,6 +162,7 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                 ),
               ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
@@ -173,11 +177,13 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                         Text(
                           winners.name,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 48,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall
+                              ?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.amber,
-                            shadows: [
+                            shadows: const [
                               Shadow(
                                 blurRadius: 10.0,
                                 color: Colors.black45,
@@ -189,10 +195,15 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                         const SizedBox(height: 5),
                         Text(
                           '${winners.score} pontos',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Colors.white70,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.7),
+                              ),
                         ),
                       ],
                     ),
@@ -202,16 +213,19 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                       children: [
                         const Duck(
                           width: 80,
+                          height: 60,
                         ),
                         const SizedBox(height: 10),
                         Text(
                           losers.name,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 48,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall
+                              ?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Colors.redAccent,
-                            shadows: [
+                            color: Theme.of(context).colorScheme.error,
+                            shadows: const [
                               Shadow(
                                 blurRadius: 10.0,
                                 color: Colors.black45,
@@ -223,10 +237,15 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                         const SizedBox(height: 5),
                         Text(
                           '${losers.score} pontos',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Colors.white70,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.7),
+                              ),
                         ),
                       ],
                     ),
@@ -240,11 +259,10 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                   child: Text(
                     getRandomTeasingPhrase(),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontStyle: FontStyle.italic,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontStyle: FontStyle.italic,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                   ),
                 ),
               const SizedBox(height: 20),
@@ -252,25 +270,22 @@ class _ShareResultScreenState extends State<ShareResultScreen> {
                 visible: !_isCapturing,
                 child: ElevatedButton.icon(
                   onPressed: _isCapturing ? null : _captureImage,
-                  icon: const Icon(Icons.camera),
-                  label: const Text('Capturar Imagem'),
+                  icon: Icon(
+                    Icons.camera,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  label: Text(
+                    'Capturar Imagem',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
-
-      // floatingActionButton: !_isCapturing
-      //     ? FloatingActionButton.extended(
-      //         onPressed: _toggleShameCam,
-      //         label: Text(_showShameCam
-      //             ? 'Ocultar ShameCam'
-      //             : 'Adicionar ShameCam'),
-      //         icon:
-      //             Icon(_showShameCam ? Icons.close : Icons.camera_alt),
-      //       )
-      //     : null, // O botão não será exibido durante a captura
     );
   }
 }
