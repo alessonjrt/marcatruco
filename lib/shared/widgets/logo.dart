@@ -9,21 +9,20 @@ class MarcaTrucoLogo extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(Assets.suits, height: MediaQuery.of(context).size.height * 0.05, color: Colors.red, ),
-        SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-        const Text(
+        Image.asset(
+          Assets.suits,
+          height: MediaQuery.of(context).size.height * 0.05,
+          color: Colors.red,
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.02,
+        ),
+        Text(
           'marcatruco',
           style: TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
-            shadows: [
-              Shadow(
-                blurRadius: 10.0,
-                color: Colors.black26,
-                offset: Offset(3.0, 3.0),
-              ),
-            ],
+            color: Theme.of(context).colorScheme.secondary,
           ),
           textAlign: TextAlign.center,
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marcatruco/routes/app_routes.dart';
 import 'package:marcatruco/shared/widgets/logo.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -6,104 +7,58 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryButtonColor = Theme.of(context).colorScheme.primary;
+    final Color secondaryButtonColor = Theme.of(context).colorScheme.secondary;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const MarcaTrucoLogo(),
-                const SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildMenuButton(
-                      context,
-                      title: 'Jogar',
-                      icon: Icons.play_arrow_rounded,
-                      route: '/score_board',
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const MarcaTrucoLogo(),
+              const SizedBox(height: 40),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: primaryButtonColor,
                     ),
-                    const SizedBox(width: 10),
-                    _buildMenuButton(
-                      context,
-                      title: 'Histórico',
-                      icon: Icons.history,
-                      route: '/history',
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.scoreBoard),
+                    icon: const Icon(
+                      Icons.play_arrow_rounded,
+                      color: Colors.white,
                     ),
-                    // Você pode descomentar e ajustar este botão se necessário
-                    // const SizedBox(width: 10),
-                    // _buildMenuButton(
-                    //   context,
-                    //   title: 'Opções',
-                    //   icon: Icons.settings,
-                    //   route: '/options',
-                    // ),
-                  ],
-                ),
-              ],
-            )),
-      ),
-    );
-  }
-
-  Widget _buildMenuButton(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required String route,
-  }) {
-    double width = MediaQuery.of(context).size.width * 0.28;
-    double height = MediaQuery.of(context).size.height * 0.11;
-
-    return Container(
-      width: width + 1,
-      height: height + 1,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).colorScheme.primary.withOpacity(0.3),
-            Theme.of(context).colorScheme.primary.withOpacity(0.6),
-          ],
-        ),
-      ),
-      child: Material(
-        borderRadius: BorderRadius.circular(4),
-        color: Theme.of(context).scaffoldBackgroundColor,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => Navigator.of(context).pushNamed(route),
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-              border: Border.all(width: 2, color: Colors.transparent),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  icon,
-                  size: 28,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                ),
-              ],
-            ),
+                    label: const Text(
+                      'Jogar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: secondaryButtonColor,
+                    ),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.history),
+                    icon: const Icon(
+                      Icons.history,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'Histórico',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

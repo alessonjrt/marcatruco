@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:marcatruco/features/score_board/score_board_controller.dart';
 import 'package:marcatruco/models/team.dart';
+import 'package:marcatruco/routes/app_routes.dart';
 import 'package:marcatruco/shared/sheets/actions_sheet.dart';
 import 'package:marcatruco/shared/widgets/score_widget.dart';
 import 'package:marcatruco/shared/widgets/truco_button.dart';
@@ -66,9 +67,11 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
             ),
             actions: [
               IconButton(
-                onPressed: () => Navigator.of(context).pushNamed(
-                    '/share_result',
-                    arguments: _scoreBoardController.match),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(AppRoutes.shareResult,
+                      arguments: _scoreBoardController.match);
+                },
                 icon: Icon(
                   Icons.share,
                   color: Theme.of(context).colorScheme.primary,
@@ -76,7 +79,7 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
               ),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Não'))
+                  child: const Text('Não'))
             ],
           ),
         );
@@ -98,11 +101,12 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
       ),
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
           onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(
+            Icons.chevron_left_rounded,
+            size: 42,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
         ),
         surfaceTintColor: Colors.transparent,
         actions: <Widget>[

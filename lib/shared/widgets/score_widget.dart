@@ -35,11 +35,6 @@ class _ScoreWidgetState extends State<ScoreWidget> {
       clipBehavior: Clip.antiAlias,
       color: Colors.transparent,
       child: InkWell(
-        // onTap: () {
-        //   setState(() {
-        //     _isInverted = !_isInverted;
-        //   });
-        // },
         child: Transform(
           alignment: Alignment.center,
           transform:
@@ -48,22 +43,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              TextFormField(
-                onChanged: widget.onNameChanged,
-                initialValue: widget.team.name,
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                ),
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-              ),
+              _buildTeamNameInput(context),
               Badge(
                 backgroundColor: Colors.transparent,
                 alignment: Alignment.centerRight,
@@ -76,71 +56,92 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                 ),
                 child: Text(
                   widget.team.score.toString(),
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: widget.team.score != 12
-                            ? Theme.of(context).colorScheme.onSurface
-                            : Colors.amberAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                      color: Theme.of(context).primaryColor, fontSize: 110),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.remove,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    onPressed: widget.onSubtract,
-                  ),
-                  IconButton(
-                    color: Theme.of(context).colorScheme.error,
-                    icon: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.add,
-                          color: Theme.of(context).colorScheme.onError,
-                        ),
-                        Text(
-                          '${widget.riseMode.value}',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.onError,
-                              ),
-                        )
-                      ],
-                    ),
-                    onPressed: () => widget.onAdd(widget.riseMode.value),
-                  ),
-                ],
-              ),
+              _buildScoreControls(context),
               Visibility(
                 visible: widget.riseMode != RiseMode.none,
-                child: TextButton.icon(
-                  onPressed: widget.onFold,
-                  icon: Text(
-                    'Correr',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  label: Icon(
-                    Icons.directions_run,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
+                child: _buildFoldButton(context),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTeamNameInput(BuildContext context) {
+    return TextFormField(
+      onChanged: widget.onNameChanged,
+      initialValue: widget.team.name,
+      textAlign: TextAlign.center,
+      maxLines: null, // Permitir várias linhas.
+      decoration: const InputDecoration(
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+      ),
+      style: Theme.of(context).textTheme.headlineMedium,
+      textAlignVertical: TextAlignVertical.center,
+    );
+  }
+
+  Widget _buildScoreControls(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.remove,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          onPressed: widget.onSubtract,
+        ),
+        IconButton(
+          color: Theme.of(context).colorScheme.error,
+          icon: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              Text(
+                '${widget.riseMode.value}',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.copyWith(color: Theme.of(context).primaryColor),
+              ),
+            ],
+          ),
+          onPressed: () => widget.onAdd(widget.riseMode.value),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFoldButton(BuildContext context) {
+    return TextButton.icon(
+      onPressed: widget.onFold,
+      icon: Text(
+        'Correr',
+        style: Theme.of(context).textTheme.labelLarge,
+      ),
+      label: Icon(
+        Icons.directions_run,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      style: TextButton.styleFrom(
+        foregroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }

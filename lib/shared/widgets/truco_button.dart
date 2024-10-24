@@ -72,13 +72,13 @@ class TrucoButton extends StatelessWidget {
       case RiseMode.none:
         return Theme.of(context).colorScheme.primary;
       case RiseMode.truco:
-        return Theme.of(context).colorScheme.secondary;
+        return Colors.orange.shade200;
       case RiseMode.six:
-        return Theme.of(context).colorScheme.tertiaryContainer;
+        return Colors.red.shade300;
       case RiseMode.nine:
-        return Theme.of(context).colorScheme.error;
+        return Colors.red.shade400;
       case RiseMode.twelve:
-        return Theme.of(context).colorScheme.surfaceContainerHighest;
+        return Colors.red;
       default:
         return Theme.of(context).colorScheme.primary;
     }

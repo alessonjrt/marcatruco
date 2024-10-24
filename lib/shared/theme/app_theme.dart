@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
+  // Definição das cores fornecidas
+  static const Color scaffoldBackgroundColor = Color(0xFFFBF8EF); // #FBF8EF
+  static const Color primaryButtonColor = Color(0xFFF29F77); // #F29F77
+  static const Color secondaryButtonColor = Color(0xFFBBADA0); // #BBADA0
+
   static ThemeData get darkTheme => ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: _darkColorScheme.background,
+        scaffoldBackgroundColor: scaffoldBackgroundColor,
         colorScheme: _darkColorScheme,
         textTheme: _buildTextTheme(Brightness.dark),
         useMaterial3: true,
@@ -12,16 +17,16 @@ class AppTheme {
 
   static ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
-        scaffoldBackgroundColor: _lightColorScheme.background,
+        scaffoldBackgroundColor: scaffoldBackgroundColor,
         colorScheme: _lightColorScheme,
+        dividerTheme: const DividerThemeData(color: secondaryButtonColor),
         textTheme: _buildTextTheme(Brightness.light),
         useMaterial3: true,
       );
 
   static TextTheme _buildTextTheme(Brightness brightness) {
     final baseTextTheme = GoogleFonts.poppinsTextTheme();
-    final textColor =
-        brightness == Brightness.dark ? Colors.white : Colors.black;
+    const textColor = secondaryButtonColor;
 
     return baseTextTheme.copyWith(
       displayLarge: baseTextTheme.displayLarge?.copyWith(
@@ -90,20 +95,18 @@ class AppTheme {
 
   static final ColorScheme _lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    primary: Colors.red.shade600,
+    primary: primaryButtonColor,
     onPrimary: Colors.white,
-    secondary: Colors.blue.shade600,
+    secondary: secondaryButtonColor,
     onSecondary: Colors.white,
     tertiary: Colors.orange.shade600,
     onTertiary: Colors.white,
     error: Colors.red.shade700,
     onError: Colors.white,
-    background: Colors.grey.shade50,
-    onBackground: Colors.black,
-    surface: Colors.white,
+    surface: scaffoldBackgroundColor,
     onSurface: Colors.black,
-    surfaceVariant: Colors.green.shade600,
-    onSurfaceVariant: Colors.white,
+    surfaceContainerHighest: Colors.grey.shade200,
+    onSurfaceVariant: Colors.black,
     outline: Colors.grey.shade500,
     shadow: Colors.black45,
     inverseSurface: Colors.grey.shade200,
@@ -113,20 +116,18 @@ class AppTheme {
 
   static final ColorScheme _darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
-    primary: Colors.red.shade300,
+    primary: primaryButtonColor,
     onPrimary: Colors.black,
-    secondary: Colors.blue.shade300,
+    secondary: secondaryButtonColor,
     onSecondary: Colors.black,
     tertiary: Colors.orange.shade300,
     onTertiary: Colors.black,
     error: Colors.red.shade200,
     onError: Colors.black,
-    background: Colors.grey.shade900,
-    onBackground: Colors.white,
-    surface: Colors.grey.shade800,
+    surface: scaffoldBackgroundColor,
     onSurface: Colors.white,
-    surfaceVariant: Colors.green.shade300,
-    onSurfaceVariant: Colors.black,
+    surfaceContainerHighest: Colors.grey.shade800,
+    onSurfaceVariant: Colors.white,
     outline: Colors.grey.shade600,
     shadow: Colors.black,
     inverseSurface: Colors.grey.shade800,

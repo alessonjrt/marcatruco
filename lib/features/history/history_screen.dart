@@ -46,6 +46,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(
+            Icons.chevron_left_rounded,
+            size: 42,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
       ),
       body: _matchesList.isEmpty
           ? Center(
@@ -77,30 +85,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final Team firstTeam = teamAWins ? match.teamA : match.teamB;
     final Team secondTeam = teamAWins ? match.teamB : match.teamA;
 
-    TextStyle firstTeamStyle = (firstTeam.score == 12
-            ? Theme.of(context).textTheme.titleLarge
-            : Theme.of(context).textTheme.titleMedium)!
-        .copyWith(
-      fontWeight: FontWeight.bold,
-      color: firstTeam.score == 12 ? Colors.amber : null,
-    );
+    // Obtenha o esquema de cores atual
+    final colorScheme = Theme.of(context).colorScheme;
 
-    TextStyle secondTeamStyle = (secondTeam.score == 12
-            ? Theme.of(context).textTheme.titleLarge
-            : Theme.of(context).textTheme.titleMedium)!
-        .copyWith(
-      fontWeight: FontWeight.bold,
-      color: secondTeam.score == 12 ? Colors.amber : null,
-    );
+    TextStyle firstTeamStyle =
+        Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontWeight: FontWeight.bold,
+              color: firstTeam.score == 12
+                  ? colorScheme.primary
+                  : colorScheme.secondary,
+            );
+
+    TextStyle secondTeamStyle =
+        Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontWeight: FontWeight.bold,
+              color: secondTeam.score == 12
+                  ? colorScheme.primary
+                  : colorScheme.secondary,
+            );
 
     return SizeTransition(
       sizeFactor: animation,
       child: GestureDetector(
         onTap: () => showMatchActionsSheet(context, match),
         child: Card(
-          color: Theme.of(context).colorScheme.surface,
+          color: Colors.white,
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          elevation: 4,
+          elevation: 2,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
@@ -110,35 +121,40 @@ class _HistoryScreenState extends State<HistoryScreen> {
               children: [
                 Text(
                   formattedStartTime,
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(),
                 ),
                 const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '${firstTeam.name} ${firstTeam.score}',
-                              style: firstTeamStyle,
-                            ),
-                            if (!isTie && firstTeam.hasWon) ...[
-                              const SizedBox(width: 8),
-                              const Icon(
-                                Icons.emoji_events,
-                                color: Colors.amber,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  '${firstTeam.name} ${firstTeam.score}',
+                                  style: firstTeamStyle,
+                                ),
                               ),
-                            ]
-                          ],
-                        ),
-                        Text(
-                          '${secondTeam.name} ${secondTeam.score}',
-                          style: secondTeamStyle,
-                        ),
-                      ],
+                              if (!isTie && firstTeam.hasWon) ...[
+                                const SizedBox(width: 8),
+                                Icon(
+                                  Icons.emoji_events,
+                                  color: Colors.amber,
+                                ),
+                              ]
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${secondTeam.name} ${secondTeam.score}',
+                            style: secondTeamStyle,
+                          ),
+                        ],
+                      ),
                     ),
                     IconButton(
                       onPressed: () async {
@@ -151,7 +167,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       },
                       icon: Icon(
                         Icons.delete,
-                        color: Theme.of(context).colorScheme.error,
+                        color: colorScheme.error,
                       ),
                     )
                   ],
@@ -165,17 +181,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<bool> _showDeleteDialog(String matchKey, int index) async {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return await showDialog<bool>(
           context: context,
           builder: (context) {
             return AlertDialog(
+              backgroundColor: colorScheme.surface,
               title: Text(
                 'Excluir Partida',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
               ),
               content: Text(
                 'Você tem certeza que deseja excluir esta partida?',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
               ),
               actions: [
                 TextButton(
@@ -184,7 +207,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   },
                   child: Text(
                     'Cancelar',
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: colorScheme.primary,
+                        ),
                   ),
                 ),
                 TextButton(
@@ -193,8 +218,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   },
                   child: Text(
                     'Excluir',
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.error,
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: colorScheme.error,
                         ),
                   ),
                 ),
