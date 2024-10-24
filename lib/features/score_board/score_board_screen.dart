@@ -89,6 +89,44 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
     _scoreBoardController.resetScores();
   }
 
+  Future<void> _resetMatch() async {
+    bool response = await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: AlertDialog(
+                surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                title: Text(
+                  'Tem certeza?',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                content: Text(
+                  'Realizar essa ação irá deletar a partida atual e criar uma nova. Esse registro não pode ser recuperado.',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('Sim')),
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('Não'))
+                ],
+              ),
+            );
+          },
+        ) ??
+        false;
+
+    if (response) {
+      _scoreBoardController.resetAndDeleteMatch();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,10 +151,17 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
           IconButton(
             icon: Icon(
               Icons.history,
-              color: Theme.of(context).colorScheme.onSurface,
+              color: Theme.of(context).colorScheme.primary,
             ),
             onPressed: () =>
                 showMatchActionsSheet(context, _scoreBoardController.match),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.zoom_out,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () => _resetMatch(),
           ),
         ],
       ),

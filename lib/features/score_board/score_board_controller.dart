@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:marcatruco/models/match.dart';
 import 'package:marcatruco/models/match_action.dart';
 import 'package:marcatruco/models/team.dart';
 import 'package:marcatruco/services/match_storage.dart';
 import 'package:marcatruco/shared/enums/rise_mode.dart';
-import 'package:flutter/material.dart';
 
 class ScoreBoardController extends ChangeNotifier {
   static const int maxPoints = 12;
@@ -145,6 +145,19 @@ class ScoreBoardController extends ChangeNotifier {
       _updateMatchInStorage();
       notifyListeners();
     }
+  }
+
+  Future<void> resetAndDeleteMatch() async {
+    if (_isMatchCreated) {
+      _matchStorage.deleteMatch(match.id);
+      _isMatchCreated = false;
+    }
+
+    Team newTeamA = Team(name: match.teamA.name);
+    Team newTeamB = Team(name: match.teamB.name);
+    match = Match(teamA: newTeamA, teamB: newTeamB, riseMode: RiseMode.none);
+
+    notifyListeners();
   }
 
   void resetScores() {
