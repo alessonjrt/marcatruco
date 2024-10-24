@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:marcatruco/features/history/history_controller.dart';
@@ -141,7 +143,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               ),
                               if (!isTie && firstTeam.hasWon) ...[
                                 const SizedBox(width: 8),
-                                Icon(
+                                const Icon(
                                   Icons.emoji_events,
                                   color: Colors.amber,
                                 ),
@@ -181,49 +183,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<bool> _showDeleteDialog(String matchKey, int index) async {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return await showDialog<bool>(
           context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: colorScheme.surface,
-              title: Text(
-                'Excluir Partida',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
-              ),
-              content: Text(
-                'Você tem certeza que deseja excluir esta partida?',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false); // Fecha o diálogo
-                  },
-                  child: Text(
-                    'Cancelar',
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: colorScheme.primary,
-                        ),
-                  ),
+          builder: (BuildContext context) {
+            return BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: AlertDialog(
+                surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                title: Text(
+                  'Tem certeza?',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true); // Fecha o diálogo
-                  },
-                  child: Text(
-                    'Excluir',
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: colorScheme.error,
-                        ),
-                  ),
+                content: Text(
+                  'Realizar essa ação irá deletar a partida. Esse registro não pode ser recuperado.',
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
-              ],
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('Sim')),
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('Não'))
+                ],
+              ),
             );
           },
         ) ??

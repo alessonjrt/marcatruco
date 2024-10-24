@@ -158,7 +158,7 @@ class _ScoreBoardScreenState extends State<ScoreBoardScreen> {
           ),
           IconButton(
             icon: Icon(
-              Icons.zoom_out,
+              Icons.delete,
               color: Theme.of(context).colorScheme.primary,
             ),
             onPressed: () => _resetMatch(),

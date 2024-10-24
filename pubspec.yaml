@@ -45,6 +45,7 @@ dependencies:
   widgets_to_image: ^1.0.0
   share_plus: ^10.0.2
   path_provider: ^2.1.4
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -74,8 +75,17 @@ flutter:
     - assets/images/ospatos.png
     - assets/images/rubber_duck.png
     - assets/images/suits.png
+    - assets/images/logo.png
     - assets/sounds/quack.mp3
   #   - images/a_dot_ham.jpeg
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#bbada0"
+  adaptive_icon_foreground: "assets/icon/icon-android.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

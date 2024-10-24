@@ -66,13 +66,12 @@ void showMatchActionsSheet(BuildContext context, Match match) {
                           ),
                           subtitle: Text(
                             _formatTimestamp(action.timestamp),
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withOpacity(0.6),
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                           ),
                         );
                       },
